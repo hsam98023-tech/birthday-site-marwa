@@ -1,0 +1,29 @@
+{
+  "name": "marwa's-secret-space",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.95.3",
+    "zustand": "^5.0.11",
+    "@react-three/fiber": "^9.5.0",
+    "three": "^0.182.0",
+    "@react-three/drei": "^10.7.7",
+    "framer-motion": "^12.34.0",
+    "react-dom": "^19.2.4",
+    "lucide-react": "^0.564.0",
+    "react": "^19.2.4",
+    "gsap": "^3.14.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

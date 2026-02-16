@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Experience } from './components/Experience';
-import { Login } from './components/Login';
-import { MusicPlayer } from './components/MusicPlayer';
+// تعديل المسارات: حذفنا كلمة /components لأن الملفات موجودة في المجلد الرئيسي
+import { Experience } from './Experience';
+import { Login } from './Login';
+import { MusicPlayer } from './MusicPlayer';
 import { useStore } from './store';
 import { AnimatePresence } from 'framer-motion';
 

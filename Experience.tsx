@@ -1,11 +1,11 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment, Stars, Float } from '@react-three/drei';
-import { Particles } from './Particles';
-import { CountdownRing } from './CountdownRing';
-import { useStore } from '../store';
+import { Particles } from './Particles'; // تعديل: حذفنا components/
+import { CountdownRing } from './CountdownRing'; // تعديل: حذفنا components/
+import { useStore } from './store'; // تعديل: الملف فالمجلد الرئيسي يعني ./store مباشرة
 import { ScrollControls, Scroll } from '@react-three/drei';
-import { Interface } from './Interface';
+import { Interface } from './Interface'; // تعديل: حذفنا components/
 
 export const Experience: React.FC = () => {
   const { hasEntered, isDarkMode } = useStore();

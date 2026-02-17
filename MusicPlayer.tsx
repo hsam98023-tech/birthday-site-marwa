@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useStore } from '../store';
+import { useStore } from './store';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc, Music, Sun, Moon, ListMusic, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

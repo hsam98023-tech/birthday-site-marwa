@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Star, RotateCcw } from 'lucide-react';
-import { supabase } from '../supabaseClient';
-import { Wish } from '../types';
+import { supabase } from '@/supabaseClient'; // تم التصحيح إلى @/
+import { Wish } from '@/types'; // تم التصحيح إلى @/
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useStore } from './store';
+import { useStore } from '@/store'; // تم التصحيح إلى @/
 
 gsap.registerPlugin(ScrollTrigger);
 

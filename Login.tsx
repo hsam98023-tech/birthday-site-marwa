@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useStore } from './store'; // تم التصحيح من ../ لـ ./
+import { useStore } from './store'; // تم تغيير المسار من ../store إلى ./store
 import { motion } from 'framer-motion';
 import { Lock, Heart } from 'lucide-react';
 
@@ -80,4 +80,14 @@ export const Login: React.FC = () => {
             >
                 {loading ? (
                     <span className="animate-pulse">ENTERING...</span>
-              
+                ) : (
+                    <>
+                       <Heart size={18} className="group-hover:fill-white transition-all duration-500" /> LOGIN
+                    </>
+                )}
+            </button>
+        </form>
+      </div>
+    </motion.div>
+  );
+};

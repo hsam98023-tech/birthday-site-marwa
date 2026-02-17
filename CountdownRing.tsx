@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';
-import { useStore } from '../store';
+import { useStore } from '@/store';
 
 export const CountdownRing: React.FC = () => {
   const torusRef = useRef<THREE.Mesh>(null!);

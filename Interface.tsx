@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Star, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { supabase } from '@/supabaseClient';
 import { useStore } from '@/store';
 import gsap from 'gsap';
@@ -12,14 +12,12 @@ export const Interface: React.FC = () => {
   const { setHasEntered } = useStore();
   const [senderName, setSenderName] = useState('');
   const [message, setMessage] = useState('');
-  const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   
   const sectionRef = useRef<HTMLDivElement>(null);
-  const timerRef = useRef<HTMLDivElement>(null);
   const textRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
-  // Timer Logic (إرجاع المؤقت)
+  // Timer Logic
   const [timeElapsed, setTimeElapsed] = useState({ days: 0, hours: 0, minutes: 0 });
   useEffect(() => {
     const startDate = new Date('2008-02-18T00:00:00');
@@ -37,18 +35,19 @@ export const Interface: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Animations
+  // GSAP Animation with fixed opacity
   useEffect(() => {
     const ctx = gsap.context(() => {
       textRefs.forEach((ref) => {
         if (!ref.current) return;
         gsap.fromTo(ref.current, 
-          { opacity: 0, y: 50, filter: 'blur(10px)' },
+          { opacity: 0, y: 30 },
           {
-            opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5,
+            opacity: 1, y: 0, duration: 1.2,
             scrollTrigger: {
               trigger: ref.current,
-              start: 'top 80%',
+              start: 'top 85%',
+              end: 'bottom 20%',
               toggleActions: 'play reverse play reverse',
             }
           }
@@ -61,86 +60,77 @@ export const Interface: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!senderName || !message) return;
-    setSending(true);
     try {
       await supabase.from('Marwa happy birthday').insert([{ sender_name: senderName, Message: message }]);
       setSent(true);
     } catch (err) { alert('Error!'); }
-    finally { setSending(false); }
   };
 
   return (
-    <div className="w-full text-white font-inter bg-transparent">
+    <div className="w-full font-inter relative z-10">
       
-      {/* SECTION 1: HERO & TIMER (الرجوع للأصل) */}
+      {/* SECTION 1: HERO & TIMER */}
       <section className="h-screen w-full flex flex-col items-center justify-center p-6 text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
-          <h1 className="font-playfair text-5xl md:text-7xl mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-pink-300">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <h1 className="font-playfair text-5xl md:text-7xl mb-4 text-pink-600 dark:text-pink-300 drop-shadow-sm">
             Happy Birthday, Marwa.
           </h1>
           
-          {/* إظهار المؤقت بشكل أوضح */}
-          <div className="flex gap-6 justify-center mt-8 backdrop-blur-sm bg-white/5 p-6 rounded-2xl border border-white/10">
-            <div className="flex flex-col">
-              <span className="text-3xl md:text-5xl font-cinzel text-pink-400">{timeElapsed.days}</span>
-              <span className="text-[10px] uppercase tracking-widest opacity-50">Days</span>
-            </div>
-            <div className="text-3xl opacity-20">:</div>
-            <div className="flex flex-col">
-              <span className="text-3xl md:text-5xl font-cinzel text-pink-400">{String(timeElapsed.hours).padStart(2,'0')}</span>
-              <span className="text-[10px] uppercase tracking-widest opacity-50">Hours</span>
-            </div>
-            <div className="text-3xl opacity-20">:</div>
-            <div className="flex flex-col">
-              <span className="text-3xl md:text-5xl font-cinzel text-pink-400">{String(timeElapsed.minutes).padStart(2,'0')}</span>
-              <span className="text-[10px] uppercase tracking-widest opacity-50">Mins</span>
-            </div>
+          <div className="flex gap-4 justify-center mt-6 bg-white/40 dark:bg-black/20 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-xl">
+            <div className="flex flex-col"><span className="text-3xl md:text-5xl font-bold text-gray-800 dark:text-white">{timeElapsed.days}</span><span className="text-[10px] text-gray-500 uppercase">Days</span></div>
+            <div className="text-3xl text-pink-500">:</div>
+            <div className="flex flex-col"><span className="text-3xl md:text-5xl font-bold text-gray-800 dark:text-white">{String(timeElapsed.hours).padStart(2,'0')}</span><span className="text-[10px] text-gray-500 uppercase">Hours</span></div>
+            <div className="text-3xl text-pink-500">:</div>
+            <div className="flex flex-col"><span className="text-3xl md:text-5xl font-bold text-gray-800 dark:text-white">{String(timeElapsed.minutes).padStart(2,'0')}</span><span className="text-[10px] text-gray-500 uppercase">Mins</span></div>
           </div>
-          <p className="mt-10 text-white/30 text-xs uppercase tracking-[0.4em] animate-pulse">Scroll to Read Your Messages</p>
+          <p className="mt-8 text-gray-400 dark:text-white/40 text-xs uppercase tracking-widest">Scroll down to read</p>
         </motion.div>
       </section>
 
-      {/* SECTION 2: MESSAGES (الرسائل اللي بغيتي) */}
-      <section ref={sectionRef} className="w-full py-20 px-6 space-y-[40vh] flex flex-col items-center">
+      {/* SECTION 2: THE MESSAGES (المكان فين كان المشكل) */}
+      <section ref={sectionRef} className="w-full py-20 px-6 space-y-[50vh] flex flex-col items-center bg-transparent">
         
         <div ref={textRefs[0]} className="max-w-2xl text-center">
-          <p className="font-playfair text-2xl md:text-4xl leading-relaxed italic text-pink-200">
+          <p className="font-playfair text-2xl md:text-4xl leading-relaxed italic text-gray-800 dark:text-pink-100">
             "Wherever life takes you, I hope you always find your way toward what gives you peace and satisfaction."
           </p>
         </div>
 
         <div ref={textRefs[1]} className="max-w-2xl text-center">
-          <p className="font-playfair text-2xl md:text-4xl leading-relaxed text-white/80">
-            "Every year adds something new to who you are, and I hope this year adds something meaningful. I wish you well in the year ahead."
+          <p className="font-playfair text-2xl md:text-4xl leading-relaxed text-gray-800 dark:text-white/90">
+            "Every year adds something new to who you are, and I hope this year adds something meaningful."
           </p>
         </div>
 
         <div ref={textRefs[2]} className="max-w-2xl text-center">
-          <p className="font-playfair text-2xl md:text-4xl leading-relaxed italic text-purple-300">
+          <p className="font-playfair text-2xl md:text-4xl leading-relaxed italic text-gray-800 dark:text-purple-200">
             "I hope this day brings you moments of calm, genuine smiles, and memories worth keeping."
           </p>
         </div>
 
         <div ref={textRefs[3]} className="max-w-2xl text-center pb-40">
-          <p className="font-playfair text-xl md:text-3xl leading-relaxed text-white/70">
-            "Birthdays are not just about getting older, but about realizing how far you’ve come... I wish you a year filled with progress, clarity, and potential."
+          <p className="font-playfair text-2xl md:text-4xl leading-relaxed text-gray-800 dark:text-white/90">
+            "Birthdays are about realizing how far you’ve come... I wish you a year filled with progress and clarity."
           </p>
         </div>
       </section>
 
       {/* SECTION 3: WISH WALL */}
-      <section className="h-screen flex items-center justify-center p-6">
-        <div className="glass-panel p-8 rounded-3xl max-w-md w-full border border-white/10 bg-black/40 backdrop-blur-xl">
-          <h2 className="text-3xl font-playfair text-center mb-6 text-white">Make a Wish</h2>
+      <section className="min-h-screen flex items-center justify-center p-6">
+        <div className="p-8 rounded-3xl max-w-md w-full border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-black/40 backdrop-blur-2xl shadow-2xl">
+          <h2 className="text-3xl font-playfair text-center mb-6 text-gray-800 dark:text-white">Make a Wish</h2>
           {sent ? (
-            <div className="text-center py-10 animate-bounce text-pink-400 font-bold">Sent to the stars! ✨</div>
+            <div className="text-center py-10 text-pink-600 font-bold">Your wish is sent! ✨</div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              <input value={senderName} onChange={e => setSenderName(e.target.value)} placeholder="Your Name" className="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none focus:border-pink-500 transition-all" required />
-              <textarea value={message} onChange={e => setMessage(e.target.value)} placeholder="Your Message" className="w-full p-4 bg-white/5 rounded-xl border border-white/10 h-32 outline-none focus:border-pink-500 transition-all" required />
-              <button className="w-full py-4 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl font-bold shadow-lg shadow-pink-500/20 hover:scale-[1.02] transition-transform">Send Wish</button>
+              <input value={senderName} onChange={e => setSenderName(e.target.value)} placeholder="Your Name" className="w-full p-4 bg-gray-100 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10 text-gray-800 dark:text-white outline-none" required />
+              <textarea value={message} onChange={e => setMessage(e.target.value)} placeholder="Your Message" className="w-full p-4 bg-gray-100 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10 text-gray-800 dark:text-white h-32 outline-none" required />
+              <button className="w-full py-4 bg-pink-600 text-white rounded-xl font-bold hover:bg-pink-700 transition-all shadow-lg">Send Wish</button>
             </form>
           )}
+          <button onClick={() => setHasEntered(false)} className="w-full mt-6 text-gray-400 text-xs uppercase flex items-center justify-center gap-2">
+            <RotateCcw size={12} /> Restart Experience
+          </button>
         </div>
       </section>
     </div>

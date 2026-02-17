@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+Import React, { useEffect } from 'react';
+// تعديل المسارات: حذفنا كلمة /components لأن الملفات موجودة في المجلد الرئيسي
 import { Experience } from './Experience';
 import { Login } from './Login';
 import { MusicPlayer } from './MusicPlayer';
@@ -9,24 +10,6 @@ const App: React.FC = () => {
   const { hasEntered, isDarkMode } = useStore();
 
   useEffect(() => {
-    // قفل الحماية: يطلب الاسم وكلمة السر بمجرد تحميل الصفحة
-    let authenticated = false;
-    while (!authenticated) {
-      const user = prompt("أدخل اسم المستخدم (User Name):");
-      const pass = prompt("أدخل كلمة السر (Password):");
-
-      // تنظيف المدخلات: حذف المسافات وتحويل الحروف لصغيرة
-      const cleanUser = user?.trim().toLowerCase();
-      const cleanPass = pass?.trim().toLowerCase();
-
-      if (cleanUser === "marwa" && cleanPass === "marwa") {
-        authenticated = true;
-      } else {
-        alert("المعلومات خاطئة! حاولي مجدداً يا مروة 💗");
-      }
-    }
-
-    // التحكم في الـ Dark Mode
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {

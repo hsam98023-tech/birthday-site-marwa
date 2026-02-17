@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useStore } from '@/store';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc, Music, Sun, Moon, ListMusic, X } from 'lucide-react';
+import { useStore } from './store'; // تأكد من المسار حسب مشروعك
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc, Sun, Moon, ListMusic, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// قائمة الأغاني المرفوعة على Catbox
 const PLAYLIST = [
   { title: "Basrah w Atoh", artist: "Cairokee", url: "https://files.catbox.moe/4d7ba7.mp3" },
   { title: "Impossible", artist: "James Arthur", url: "https://files.catbox.moe/wkvb03.mp3" },
@@ -17,18 +18,19 @@ export const MusicPlayer: React.FC = () => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  // التعديل الأول: جعل القائمة مفتوحة افتراضياً
+  
+  // جعل القائمة مفتوحة افتراضياً كما طلبت
   const [showPlaylist, setShowPlaylist] = useState(true); 
   const [progress, setProgress] = useState(0);
 
-  // Expand player & playlist on Login
+  // تمديد المشغل وفتح القائمة عند تسجيل الدخول
   useEffect(() => {
     if (hasEntered) {
         if (audioRef.current) audioRef.current.volume = 0.4;
         
         const timer = setTimeout(() => {
             setIsExpanded(true);
-            setShowPlaylist(true); // التأكد من فتحها عند الدخول
+            setShowPlaylist(true); 
         }, 1000);
         return () => clearTimeout(timer);
     }
@@ -36,7 +38,7 @@ export const MusicPlayer: React.FC = () => {
 
   const selectTrack = (index: number) => {
     setCurrentTrackIndex(index);
-    // إزالة setShowPlaylist(false) لتبقى القائمة مفتوحة حتى بعد اختيار أغنية
+    // تبقى القائمة مفتوحة حتى بعد اختيار أغنية
     if (!isPlaying) {
         setIsPlaying(true);
         setTimeout(() => audioRef.current?.play(), 50);
@@ -82,13 +84,15 @@ export const MusicPlayer: React.FC = () => {
     <div className="fixed top-6 right-6 z-50 flex flex-col items-end gap-4">
         <audio ref={audioRef} src={PLAYLIST[currentTrackIndex].url} onTimeUpdate={handleTimeUpdate} onEnded={nextTrack} preload="auto" />
 
-        <button onClick={toggleTheme} className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-white/60 dark:bg-black/40 backdrop-blur-md border border-black/5 dark:border-white/10 shadow-lg text-[#1D1D1F] dark:text-white transition-all hover:scale-105">
+        {/* زر تغيير الوضع (Dark/Light) */}
+        <button onClick={toggleTheme} className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-white/60 dark:bg-black/40 backdrop-blur-md border border-black/5 dark:border-white/10 shadow-lg text-[#1D1D1F] dark:text-white transition-all hover:scale-105 pointer-events-auto">
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
         
+        {/* مشغل الموسيقى الرئيسي */}
         <motion.div 
             animate={{ width: isExpanded ? '280px' : '50px', height: isExpanded ? 'auto' : '50px' }}
-            className="glass-panel rounded-2xl overflow-visible relative shadow-xl bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-black/5 dark:border-white/10"
+            className="glass-panel rounded-2xl overflow-visible relative shadow-xl bg-white/60 dark:bg-black/40 backdrop-blur-xl border border-black/5 dark:border-white/10 pointer-events-auto"
         >
             <div className="absolute top-0 right-0 w-[50px] h-[50px] flex items-center justify-center cursor-pointer z-20 text-[#1D1D1F]/80 dark:text-white/80" onClick={() => setIsExpanded(!isExpanded)}>
                 <div className={`p-2 rounded-full ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : ''}`}>
@@ -126,13 +130,14 @@ export const MusicPlayer: React.FC = () => {
             </AnimatePresence>
         </motion.div>
 
+        {/* عرض قائمة التشغيل (Playlist) */}
         <AnimatePresence>
             {isExpanded && showPlaylist && (
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="w-[280px] glass-panel rounded-2xl overflow-hidden bg-white/90 dark:bg-black/80 backdrop-blur-2xl border border-black/5 dark:border-white/10 shadow-2xl z-40"
+                    className="w-[280px] glass-panel rounded-2xl overflow-hidden bg-white/90 dark:bg-black/80 backdrop-blur-2xl border border-black/5 dark:border-white/10 shadow-2xl z-40 pointer-events-auto"
                 >
                     <div className="p-4 space-y-2">
                         <div className="flex items-center justify-between mb-2">

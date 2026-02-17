@@ -1,5 +1,4 @@
-Import React, { useEffect } from 'react';
-// تعديل المسارات: حذفنا كلمة /components لأن الملفات موجودة في المجلد الرئيسي
+import React, { useEffect } from 'react';
 import { Experience } from './Experience';
 import { Login } from './Login';
 import { MusicPlayer } from './MusicPlayer';
@@ -20,11 +19,7 @@ const App: React.FC = () => {
   return (
     <div className="w-full h-screen relative transition-colors duration-500 bg-[#FBFBFD] dark:bg-black overflow-hidden font-inter">
       <MusicPlayer />
-      
-      {/* 3D Background & Scrollable Content */}
       <Experience />
-
-      {/* Login Overlay - Only shows when !hasEntered */}
       <AnimatePresence>
         {!hasEntered && <Login />}
       </AnimatePresence>

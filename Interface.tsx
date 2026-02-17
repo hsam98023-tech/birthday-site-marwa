@@ -5,7 +5,7 @@ import { supabase } from '../supabaseClient';
 import { Wish } from '../types';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useStore } from '../store';
+import { useStore } from './store';
 
 gsap.registerPlugin(ScrollTrigger);
 
